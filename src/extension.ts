@@ -29,19 +29,21 @@ export function activate(context) {
         }
 
         let currentUri = d.uri;
-        let readmePath = path.join(currentUri.fsPath, "../", "node_modules", moduleName, "README.md");
+        let dirPath = path.dirname(currentUri.fsPath);
+        let readmePath = path.join("node_modules", moduleName, "README.md");
+        let readmeUri;
+        let exists;
 
-        let readmeUri = vscode.Uri.file(readmePath);
+        do {
+            dirPath = path.join(dirPath, "../");
+            readmeUri = vscode.Uri.file(path.join(dirPath, readmePath));
+        } while (!(exists = fs.existsSync(readmeUri.fsPath)) && dirPath !== path.join(dirPath, "../"))
 
-        console.log(readmePath);
-
-        fs.exists(readmePath, exists => {
-            if (exists) {
-                return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);          
-            } else {
-                return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
-            }
-        });
+        if (exists) {
+            return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);          
+        } else {
+            return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
+        }
     });
     context.subscriptions.push(disposable);
 }

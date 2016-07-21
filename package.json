@@ -1,6 +1,6 @@
 {
   "name": "vscode-node-readme",
-  "displayName": "vscode-node-readme",
+  "displayName": "node-readme",
   "description": "view installed node_modules readmes",
   "version": "0.0.1",
   "publisher": "bengreenier",

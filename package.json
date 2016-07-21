@@ -1,0 +1,42 @@
+{
+  "name": "vscode-node-readme",
+  "displayName": "vscode-node-readme",
+  "description": "view installed node_modules readmes",
+  "version": "0.0.1",
+  "publisher": "bengreenier",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Productivity"
+  ],
+  "activationEvents": [
+    "onCommand:nodeReadme.showReadme"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == javascript",
+          "command": "nodeReadme.showReadme"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "title": "View Readme",
+        "command": "nodeReadme.showReadme"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.5",
+    "vscode": "^0.11.0"
+  }
+}

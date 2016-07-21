@@ -13,6 +13,10 @@ export function activate(context) {
         let e = vscode.window.activeTextEditor;
         let d = e.document;
 
+        if (d.languageId !== "javascript") {
+            return vscode.window.showErrorMessage("Javascript file not selected");
+        }
+
         let pos = e.selection.start;
         let line = d.lineAt(pos.line);
 
@@ -26,6 +30,10 @@ export function activate(context) {
                 moduleName = matched[1];
                 break;
             }
+        }
+
+        if (!moduleName) {
+            return vscode.window.showErrorMessage("Require call not selected");
         }
 
         let currentUri = d.uri;

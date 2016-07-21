@@ -35,12 +35,12 @@ export function activate(context) {
         let exists;
 
         do {
-            dirPath = path.join(dirPath, "../");
             readmeUri = vscode.Uri.file(path.join(dirPath, readmePath));
+            dirPath = path.join(dirPath, "../");
         } while (!(exists = fs.existsSync(readmeUri.fsPath)) && dirPath !== path.join(dirPath, "../"))
 
         if (exists) {
-            return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);          
+            return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);
         } else {
             return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
         }

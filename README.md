@@ -11,6 +11,10 @@ Quickly open `node_modules` readme files.
 + ...
 + Profit
 
+## Issues?
+
+File them [here](https://github.com/bengreenier/vscode-node-readme/issues). Feel free to contribute code, if you're a developer.
+
 ## License
 
 MIT

@@ -2,14 +2,28 @@
 
 view installed node_modules readmes
 
+## Changes
+
++ 0.1.0
+    - Support for menu command
+    - Support for documentation from npmjs.org
+    - Better command name
+
 ## Features
 
 Quickly open `node_modules` readme files.
 
+### Inline
+
 + Right click a `require('moduleName')` call in a `js` file
-+ Select `View Readme`
-+ ...
-+ Profit
++ Select `View Node Module Readme`
+
+### Via Menu
+
++ Open Menu (`Ctrl+Shift+P` by default on windows)
++ Type `View Node Module Readme`
++ If you have a module highlighted we'll go to that
++ If you do not, we'll prompt for a module name
 
 ## Issues?
 

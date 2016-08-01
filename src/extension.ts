@@ -4,10 +4,13 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import {NpmDataProvider} from './npmdata';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context) {
+
+    let registration = vscode.workspace.registerTextDocumentContentProvider(NpmDataProvider.SchemaType, new NpmDataProvider());
 
     let disposable = vscode.commands.registerCommand('nodeReadme.showReadme', () => {
         let e = vscode.window.activeTextEditor;
@@ -61,11 +64,11 @@ export function activate(context) {
             if (exists) {
                 return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);
             } else {
-                return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
+                return vscode.commands.executeCommand("markdown.showPreviewToSide", vscode.Uri.parse(`${NpmDataProvider.SchemaType}://npmjs.org/${moduleName}`));
             }
         });
     });
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable, registration);
 }
 
 // this method is called when your extension is deactivated

@@ -32,26 +32,38 @@ export function activate(context) {
             }
         }
 
+        // the following optionally depends on input so we promise-ify it
+        let thenable : PromiseLike<string>;
+
         if (!moduleName) {
-            return vscode.window.showErrorMessage("Require call not selected");
-        }
-
-        let currentUri = d.uri;
-        let dirPath = path.dirname(currentUri.fsPath);
-        let readmePath = path.join("node_modules", moduleName, "README.md");
-        let readmeUri;
-        let exists;
-
-        do {
-            readmeUri = vscode.Uri.file(path.join(dirPath, readmePath));
-            dirPath = path.join(dirPath, "../");
-        } while (!(exists = fs.existsSync(readmeUri.fsPath)) && dirPath !== path.join(dirPath, "../"))
-
-        if (exists) {
-            return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);
+            thenable = vscode.window.showInputBox({
+                prompt: "Enter Module name"
+            });
         } else {
-            return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
+            thenable = Promise.resolve(moduleName);
         }
+
+        // note that this hides moduleName in the outer scope
+        thenable.then((moduleName) => {
+            
+            // then we proceed with lookup
+            let currentUri = d.uri;
+            let dirPath = path.dirname(currentUri.fsPath);
+            let readmePath = path.join("node_modules", moduleName, "README.md");
+            let readmeUri;
+            let exists;
+
+            do {
+                readmeUri = vscode.Uri.file(path.join(dirPath, readmePath));
+                dirPath = path.join(dirPath, "../");
+            } while (!(exists = fs.existsSync(readmeUri.fsPath)) && dirPath !== path.join(dirPath, "../"))
+
+            if (exists) {
+                return vscode.commands.executeCommand("markdown.showPreviewToSide", readmeUri);
+            } else {
+                return vscode.window.showErrorMessage(`Module ${moduleName} is not installed locally.`);
+            }
+        });
     });
     context.subscriptions.push(disposable);
 }

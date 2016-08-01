@@ -18,14 +18,14 @@
     "menus": {
       "editor/context": [
         {
-          "when": "editorLangId == javascript",
+          "when": "editorLangId == javascript || editorLangId == typescript",
           "command": "nodeReadme.showReadme"
         }
       ]
     },
     "commands": [
       {
-        "title": "View Readme",
+        "title": "View Node Module Readme",
         "command": "nodeReadme.showReadme"
       }
     ]

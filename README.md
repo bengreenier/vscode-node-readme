@@ -4,6 +4,11 @@ view installed node_modules readmes
 
 ## Changes
 
++ 0.2.0
+    - Better npm lookup (for documentation that you don't have locally)
+    - Local module names now in tabs (#9)
+    - Fixed version mismatch when querying npm (#8)
+
 + 0.1.1
     - Fixed bug where via menu only worked when a js file was open
     - Fixed ugly failure when registry didn't have repository information (now failure is clear)

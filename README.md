@@ -2,7 +2,12 @@
 
 view installed node_modules readmes
 
+![example](./example.gif)
+
 ## Changes
++ 1.0.2
+    - Add example gif to readme
+
 + 1.0.1
     - Small bugfix for promise bug in 1.0.0
 

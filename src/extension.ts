@@ -29,6 +29,21 @@ export function activate(context) {
                     break;
                 }
             }
+        } else if (d.languageId === "typescript") {
+            
+            let pos = e.selection.start;
+            let line = d.lineAt(pos.line);
+
+            // figure out what module we want
+            let re = /import .*?from\s|("|')(.*?)("|')/g;
+            let str = line.text;
+            let matched;
+            while ((matched = re.exec(str)) != null) {
+                if (matched.index <= pos.character && pos.character <= re.lastIndex) {
+                    moduleName = matched[2];
+                    break;
+                }
+            }
         }
 
         // the following optionally depends on input so we promise-ify it

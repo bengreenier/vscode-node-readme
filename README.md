@@ -4,6 +4,10 @@ view installed node_modules readmes
 
 ## Changes
 
++ 0.3.0
+    - Typescript support (#6)
+    - ES6 Import support
+
 + 0.2.0
     - Better npm lookup (for documentation that you don't have locally)
     - Local module names now in tabs (#9)
@@ -24,7 +28,7 @@ Quickly open `node_modules` readme files.
 
 ### Inline
 
-+ Right click a `require('moduleName')` call in a `js` file
++ Right click a `require('moduleName')` call in a `js` or `ts` file
 + Select `View Node Module Readme`
 
 ### Via Menu

@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "bengreenier",
   "engines": {
     "vscode": "^1.0.0"
@@ -19,6 +19,10 @@
       "editor/context": [
         {
           "when": "editorLangId == javascript",
+          "command": "nodeReadme.showReadme"
+        },
+        {
+          "when": "editorLangId == typescript",
           "command": "nodeReadme.showReadme"
         }
       ]

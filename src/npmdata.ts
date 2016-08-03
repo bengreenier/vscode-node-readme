@@ -30,6 +30,9 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
                 if (!body["versions"] || !body["versions"][latestVer]) {
                     return reject(new Error("Missing registry response data"));
                 }
+                if (!body["versions"]["respository"] || !body["versions"][latestVer]["respository"]["url"]) {
+                    return reject(new Error("Missing registry repository data"));
+                }
 
                 let parsed = url.parse(body["versions"][latestVer]["repository"]["url"]);
                 parsed.protocol = "https";

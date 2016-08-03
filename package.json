@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "publisher": "bengreenier",
   "engines": {
     "vscode": "^1.0.0"
@@ -44,6 +44,7 @@
     "vscode": "^0.11.0"
   },
   "dependencies": {
+    "node-core-module-names": "^1.1.0",
     "request": "^2.74.0"
   }
 }

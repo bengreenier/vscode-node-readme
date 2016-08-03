@@ -4,9 +4,13 @@ view installed node_modules readmes
 
 ## Changes
 
++ 1.0.0
+    - Node core doc support (#12)
+    - 1.0.0 release! Base feature-set implemented.
+
 + 0.3.0
     - Typescript support (#6)
-    - ES6 Import support
+    - ES6 Import support (see [#13](https://github.com/bengreenier/vscode-node-readme/issues/13) for more info)
 
 + 0.2.0
     - Better npm lookup (for documentation that you don't have locally)

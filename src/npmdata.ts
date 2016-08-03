@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as coreNames from 'node-core-module-names';
 
 export class NpmDataProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "npm-data";
@@ -25,7 +26,15 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
         return this.getReadme(moduleName, moduleVersion);
     }
 
-    public getReadme(moduleName :  string, moduleVersion? : string) : PromiseLike<string> {
+    private getReadme(moduleName :  string, moduleVersion? : string) : PromiseLike<string> {
+        if (coreNames.indexOf(moduleName) >= 0) {
+            return this.queryGithub(`https://api.github.com/repos/nodejs/node/contents/doc/api/${moduleName}.md`);
+        } else {
+            return this.queryNpm(moduleName, moduleVersion);
+        }
+    }
+
+    private queryNpm(moduleName : string, moduleVersion: string) : PromiseLike<string> {
         return new Promise((resolve, reject) => {
             request({
                 url: `https://registry.npmjs.org/${moduleName}`,
@@ -73,19 +82,25 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
                     return reject(new Error("Unsupported registry repository type"));
                 }
 
-                // make a request to github for the docs
-                request({
-                    url: githubParts.join("/"),
-                    headers: {
-                        "User-Agent": "bengreenier/vscode-node-readme",
-                        "Accept": "application/vnd.github.v3.raw"
-                    }
-                }, (err, res, body) => {
-                    if (err || res.statusCode.toString()[0] !== "2") {
-                        return reject(err || `Invalid statusCode ${res.statusCode}`);
-                    }
-                    resolve(body.toString());
-                });
+                return this.queryGithub(githubParts.join("/"));
+            });
+        });
+    }
+
+    private queryGithub(url : string) : PromiseLike<string> {
+        return new Promise((resolve, reject) => {
+            // make a request to github for the docs
+            request({
+                url: url,
+                headers: {
+                    "User-Agent": "bengreenier/vscode-node-readme",
+                    "Accept": "application/vnd.github.v3.raw"
+                }
+            }, (err, res, body) => {
+                if (err || res.statusCode.toString()[0] !== "2") {
+                    return reject(err || `Invalid statusCode ${res.statusCode}`);
+                }
+                resolve(body.toString());
             });
         });
     }

@@ -82,7 +82,7 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
                     return reject(new Error("Unsupported registry repository type"));
                 }
 
-                return this.queryGithub(githubParts.join("/"));
+                resolve(this.queryGithub(githubParts.join("/")));
             });
         });
     }

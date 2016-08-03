@@ -3,6 +3,8 @@
 view installed node_modules readmes
 
 ## Changes
++ 1.0.1
+    - Small bugfix for promise bug in 1.0.0
 
 + 1.0.0
     - Node core doc support (#12)

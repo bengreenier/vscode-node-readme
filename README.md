@@ -1,16 +1,21 @@
 # vscode-node-readme
 
-view installed node_modules readmes
+[![Current Version](http://vsmarketplacebadge.apphb.com/version/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Install Count](http://vsmarketplacebadge.apphb.com/installs/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Open Issues](http://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 
-![example](example.gif)
+View installed node_modules readmes
+
+![example](images/example.gif)
 
 ## Changes
 
-+ 1.0.0 - 1.0.3
++ 1.0.0 - 1.0.4
     - Node core doc support (#12)
     - 1.0.0 release! Base feature-set implemented.
     - Small bugfix for promise bug in 1.0.0
     - Add example gif to readme
+    - Marketplace badges
 
 + 0.3.0
     - Typescript support (#6)

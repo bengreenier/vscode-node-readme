@@ -2,18 +2,15 @@
 
 view installed node_modules readmes
 
-![example](./example.gif)
+![example](example.gif)
 
 ## Changes
-+ 1.0.2
-    - Add example gif to readme
 
-+ 1.0.1
-    - Small bugfix for promise bug in 1.0.0
-
-+ 1.0.0
++ 1.0.0 - 1.0.3
     - Node core doc support (#12)
     - 1.0.0 release! Base feature-set implemented.
+    - Small bugfix for promise bug in 1.0.0
+    - Add example gif to readme
 
 + 0.3.0
     - Typescript support (#6)

@@ -2,15 +2,15 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "bengreenier",
   "icon": "images/icon.svg",
   "engines": {
     "vscode": "^1.0.0"
   },
   "galleryBanner": {
-    "color": "#FF9D21",
-    "theme": "dark"
+    "color": "#ffc985",
+    "theme": "light"
   },
   "categories": [
     "Other"

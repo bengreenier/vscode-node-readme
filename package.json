@@ -2,12 +2,12 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "publisher": "bengreenier",
   "icon": "images/icon.svg",
   "engines": {
-    "vscode": "^1.0.0"
-  },
+        "vscode": "^1.12.0"
+    },
   "galleryBanner": {
     "color": "#ffc985",
     "theme": "light"
@@ -24,11 +24,13 @@
       "editor/context": [
         {
           "when": "editorLangId == javascript",
-          "command": "nodeReadme.showReadme"
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
         },
         {
           "when": "editorLangId == typescript",
-          "command": "nodeReadme.showReadme"
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
         }
       ]
     },
@@ -37,16 +39,26 @@
         "title": "View Node Module Readme",
         "command": "nodeReadme.showReadme"
       }
-    ]
+    ],
+    "keybindings": [{
+        "command": "nodeReadme.showReadme",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
+    }]
   },
   "scripts": {
-    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "typescript": "^1.8.5",
-    "vscode": "^0.11.0"
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
   },
   "dependencies": {
     "node-core-module-names": "^1.1.0",

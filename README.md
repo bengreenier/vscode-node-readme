@@ -8,7 +8,22 @@ View installed node_modules readmes
 
 ![Example](images/example.gif)
 
+## Keybinding
+
+If you wish to change the key binding for this behavior, do the following:
+
++ File -> Preferences -> Keyboard Shortcuts
++ Search for "nodeReadme"
++ Click on the pencil icon to edit
+
 ## Changes
+
++ 1.1.0
+    - Fixed plugin to work again!
+    - Documented keybindings (and how to change 'em)
+    - Default keybinding `ctrl+shift+r` or `cmd+shift+r`
+    - command should be logically grouped under navigation (#16)
+    - fails when no file is open (#14)
 
 + 1.0.0 - 1.0.7
     - Node core doc support (#12)

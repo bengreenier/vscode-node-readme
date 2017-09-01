@@ -1,8 +1,8 @@
 # vscode-node-readme
 
-[![Current Version](http://vsmarketplacebadge.apphb.com/version/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
-[![Install Count](http://vsmarketplacebadge.apphb.com/installs/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
-[![Open Issues](http://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Current Version](https://vsmarketplacebadge.apphb.com/version/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Install Count](https://vsmarketplacebadge.apphb.com/installs/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Open Issues](https://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 
 View installed node_modules readmes
 
@@ -17,6 +17,10 @@ If you wish to change the key binding for this behavior, do the following:
 + Click on the pencil icon to edit
 
 ## Changes
+
++ 1.2.0
+    - JS `import` support (see [#13](https://github.com/bengreenier/vscode-node-readme/issues/13))
+    - Small architectural changes to support future development
 
 + 1.1.0
     - Fixed plugin to work again!

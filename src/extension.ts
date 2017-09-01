@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {NpmDataProvider} from './npmdata';
 import {LocalDataProvider} from './localdata';
+import parsers from './parsers';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -18,37 +19,18 @@ export function activate(context) {
                 document: null,
                 selection: null
             };
-            let d = e.document || {
-                languageId: null
-            };
+            let d = e.document;
+            let langId = d.languageId || null;
             let moduleName;
 
-            if (d.languageId === "javascript") {
+            if (langId === 'javascript' || langId === 'typescript') {
                 let pos = e.selection.start;
                 let line = d.lineAt(pos.line);
 
-                // figure out what module we want
-                let re = /require\(['"]([^'"]+)['"](?:, ['"]([^'"]+)['"])?\);?/g;
-                let str = line.text;
-                let matched;
-                while ((matched = re.exec(str)) != null) {
-                    if (matched.index <= pos.character && pos.character <= re.lastIndex) {
-                        moduleName = matched[1];
-                        break;
-                    }
-                }
-            } else if (d.languageId === "typescript") {
-                
-                let pos = e.selection.start;
-                let line = d.lineAt(pos.line);
+                for (let i = 0; i < parsers.length; i++) {
+                    moduleName = parsers[i](line, pos);
 
-                // figure out what module we want
-                let re = /import .*?from\s|("|')(.*?)("|')/g;
-                let str = line.text;
-                let matched;
-                while ((matched = re.exec(str)) != null) {
-                    if (matched.index <= pos.character && pos.character <= re.lastIndex) {
-                        moduleName = matched[2];
+                    if (moduleName) {
                         break;
                     }
                 }

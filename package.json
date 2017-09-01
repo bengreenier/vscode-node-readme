@@ -2,12 +2,12 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "bengreenier",
-  "icon": "images/icon.svg",
+  "icon": "images/icon.png",
   "engines": {
-        "vscode": "^1.12.0"
-    },
+    "vscode": "^1.12.0"
+  },
   "galleryBanner": {
     "color": "#ffc985",
     "theme": "light"
@@ -40,12 +40,14 @@
         "command": "nodeReadme.showReadme"
       }
     ],
-    "keybindings": [{
+    "keybindings": [
+      {
         "command": "nodeReadme.showReadme",
         "key": "ctrl+shift+r",
         "mac": "cmd+shift+r",
         "when": "editorTextFocus"
-    }]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -66,7 +68,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bengreenier/vscode-node-readme.git"
+    "url": "https://github.com/bengreenier/vscode-node-readme.git"
   },
   "keywords": [
     "vscode",

@@ -1,27 +1,27 @@
-import * as request from 'request';
-import * as vscode from 'vscode';
-import * as url from 'url';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as request from 'request'
+import * as vscode from 'vscode'
+import * as url from 'url'
+import * as fs from 'fs'
 
 export class LocalDataProvider implements vscode.TextDocumentContentProvider {
-    public static SchemaType = "npm-local-data";
+    public static SchemaType = "npm-local-data"
     
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
-        let moduleName = uri.path.substr(1);
-        
-        return this.getReadme(moduleName);
+
+        const sep = process.platform == 'win32' ? '\\' : '/'
+
+        return this.getReadme(uri.fsPath.substr(0, uri.fsPath.lastIndexOf(sep)))
     }
 
-    public getReadme(moduleName : string) : PromiseLike<string> {
+    public getReadme(path : string) : PromiseLike<string> {
         return new Promise((resolve, reject) => {
-            fs.readFile(path.join(vscode.workspace.rootPath, "node_modules", moduleName, "readme.md"), (err, data) => {
+            fs.readFile(path, (err, data) => {
                 if (err) {
-                    return reject(err);
+                    return reject(err)
                 } else {
-                    resolve(data.toString());
+                    resolve(data.toString())
                 }
-            });
-        });
+            })
+        })
     }
 }

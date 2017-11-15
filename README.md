@@ -18,6 +18,10 @@ If you wish to change the key binding for this behavior, do the following:
 
 ## Changes
 
++ 2.0.0
+    - Multi-root support (requires vscode october 2017 update or higher)
+    - tsx/jsx support
+
 + 1.2.0
     - JS `import` support (see [#13](https://github.com/bengreenier/vscode-node-readme/issues/13))
     - Small architectural changes to support future development

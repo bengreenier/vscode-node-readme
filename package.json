@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {
@@ -31,6 +31,16 @@
           "when": "editorLangId == typescript",
           "command": "nodeReadme.showReadme",
           "group": "navigation@9999"
+        },
+        {
+          "when": "editorLangId == javascriptreact",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
+        },
+        {
+          "when": "editorLangId == typescriptreact",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
         }
       ]
     },
@@ -56,15 +66,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "typescript": "^2.0.3",
-    "vscode": "^1.0.0",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^6.0.91",
     "mocha": "^2.3.3",
-    "@types/node": "^6.0.40",
-    "@types/mocha": "^2.2.32"
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.7"
   },
   "dependencies": {
     "node-core-module-names": "^1.1.0",
-    "request": "^2.74.0"
+    "request": "^2.83.0"
   },
   "repository": {
     "type": "git",
@@ -73,7 +83,8 @@
   "keywords": [
     "vscode",
     "node",
-    "readme"
+    "readme",
+    "multi-root ready"
   ],
   "author": "Ben Greenier",
   "license": "MIT",

@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import * as coreNames from 'node-core-module-names'
 
 export class NpmDataProvider implements vscode.TextDocumentContentProvider {
-    public static SchemaType = "npm-data"
+    public static SchemaType = "node-readme-npm-data"
     
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
 

@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {
@@ -20,6 +20,21 @@
   ],
   "main": "./out/src/extension",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Documentation overrides",
+        "properties": {
+          "nodeReadme.overrides": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "default": null,
+            "description": "Specifies documentation overrides on a per module basis"
+          }
+        }
+      }
+    ],
     "menus": {
       "editor/context": [
         {

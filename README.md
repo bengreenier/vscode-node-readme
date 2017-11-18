@@ -16,7 +16,30 @@ If you wish to change the key binding for this behavior, do the following:
 + Search for "nodeReadme"
 + Click on the pencil icon to edit
 
+## Custom overrides
+
+If you wish to load a document that isn't the `README.md` file for a particular module, do the following:
+
++ File -> Preferences -> Settings
++ Search for "nodeReadme"
++ Override `nodeReadme.overrides` with an object containing your overrides indexed by module name
+
+For example: 
+
+```
+"nodeReadme.overrides": {
+        "angular-infinity": "file://c:/path/to/document",
+        "angular2": "https://raw.githubusercontent.com/angular/angular/master/aio/content/guide/ajs-quick-reference.md"
+    }
+```
+
+This will load that file rather than the official `README.md` as determined from the `npm package`.
+
 ## Changes
+
++ 2.1.0
+    - Fix usage in non-workspaces fails (see [#22](https://github.com/bengreenier/vscode-node-readme/issues/22))
+    - Support custom documentation overrides (see [#15](https://github.com/bengreenier/vscode-node-readme/issues/15))
 
 + 2.0.0
     - Multi-root support (requires vscode october 2017 update or higher)

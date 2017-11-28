@@ -74,16 +74,16 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
 
         if (folder) {
             // we can search locally @ this path
-            localUris = [folder.uri.with({path: path.join(folder.uri.fsPath, "node_modules", moduleName, "readme.md")})]
+            localUris = [folder.uri.with({path: path.join(folder.uri.fsPath, "node_modules", moduleName, "README.md")})]
         }
     } else if (isMultiRoot) {
         // we can search locally @ these paths
-        localUris.push(vscode.workspace.workspaceFolders.map(f => f.uri.with({path: path.join(f.uri.fsPath, "node_modules", moduleName, "readme.md")})))
+        localUris.push(vscode.workspace.workspaceFolders.map(f => f.uri.with({path: path.join(f.uri.fsPath, "node_modules", moduleName, "README.md")})))
     } else if (vscode.workspace.rootPath) {
         const folder = vscode.Uri.parse(`file://${vscode.workspace.rootPath}`)
 
         // we can search locally @ this path
-        localUris = [folder.with({path: path.join(folder.fsPath, "node_modules", moduleName, "readme.md")})]
+        localUris = [folder.with({path: path.join(folder.fsPath, "node_modules", moduleName, "README.md")})]
     }
 
     // see if we have an override for it

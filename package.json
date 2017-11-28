@@ -1,0 +1,76 @@
+{
+  "name": "vscode-node-readme",
+  "displayName": "node-readme",
+  "description": "view installed node_modules readmes",
+  "version": "3.0.0",
+  "publisher": "bengreenier",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.18.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:nodeReadme.showReadme"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configuration": [
+      {
+        "title": "Documentation overrides",
+        "properties": {
+          "nodeReadme.overrides": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "default": null,
+            "description": "Specifies documentation overrides on a per module basis"
+          }
+        }
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == javascript || editorLangId == typescript || editorLangId == javascriptreact || editorLangId == typescriptreact",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "title": "View Node Module Readme",
+        "command": "nodeReadme.showReadme"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "nodeReadme.showReadme",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6",
+    "@types/node": "^7.0.43",
+    "@types/mocha": "^2.2.42"
+  },
+  "dependencies": {
+    "node-core-module-names": "^1.1.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}

@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {

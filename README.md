@@ -37,6 +37,10 @@ This will load that file rather than the official `README.md` as determined from
 
 ## Changes
 
++ 2.2.0
+    - Major unix bugfix (shoutout to [@oliversturm](https://github.com/oliversturm))
+        - Fix readme vs README filename cross platform issues (see [#24](https://github.com/bengreenier/vscode-node-readme/issues/24))
+    - Fix issue with forward-slashes in module names (see [#25](https://github.com/bengreenier/vscode-node-readme/issues/25))
 + 2.1.0
     - Fix usage in non-workspaces fails (see [#22](https://github.com/bengreenier/vscode-node-readme/issues/22))
     - Support custom documentation overrides (see [#15](https://github.com/bengreenier/vscode-node-readme/issues/15))

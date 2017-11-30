@@ -6,7 +6,12 @@ export class LocalDataProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "node-readme-local-data"
     
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
-        return this.getReadme(uri.fsPath.substr(0, uri.fsPath.lastIndexOf(path.sep)))
+        const fsPath = uri.fsPath
+
+        // we need to account for moduleNames with /  in them
+        const pathEndPosition = fsPath.toLowerCase().lastIndexOf(".md") + 3
+
+        return this.getReadme(uri.fsPath.substr(0, pathEndPosition))
     }
 
     public getReadme(path : string) : PromiseLike<string> {

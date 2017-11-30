@@ -48,6 +48,10 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
     }
 
     private queryNpm(moduleName : string, moduleVersion: string) : PromiseLike<string> {
+        
+        // we need to account for moduleNames with /  in them
+        moduleName = moduleName.replace(/\//g, '%2f')
+        
         return new Promise((resolve, reject) => {
             request({
                 url: `https://registry.npmjs.org/${moduleName}`,

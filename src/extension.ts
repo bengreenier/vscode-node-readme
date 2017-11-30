@@ -59,6 +59,10 @@ function scanDocument(textEditor : vscode.TextEditor) {
     }
 }
 
+function fixModuleNameForTabTitle(moduleName: string): string {
+    return moduleName.substr(moduleName.lastIndexOf(path.sep) + 1);
+}
+
 function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
     let isMultiRoot = false
 
@@ -74,16 +78,16 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
 
         if (folder) {
             // we can search locally @ this path
-            localUris = [folder.uri.with({path: path.join(folder.uri.fsPath, "node_modules", moduleName, "readme.md")})]
+            localUris = [folder.uri.with({path: path.join(folder.uri.fsPath, "node_modules", moduleName, "README.md")})]
         }
     } else if (isMultiRoot) {
         // we can search locally @ these paths
-        localUris.push(vscode.workspace.workspaceFolders.map(f => f.uri.with({path: path.join(f.uri.fsPath, "node_modules", moduleName, "readme.md")})))
+        localUris.push(vscode.workspace.workspaceFolders.map(f => f.uri.with({path: path.join(f.uri.fsPath, "node_modules", moduleName, "README.md")})))
     } else if (vscode.workspace.rootPath) {
         const folder = vscode.Uri.parse(`file://${vscode.workspace.rootPath}`)
 
         // we can search locally @ this path
-        localUris = [folder.with({path: path.join(folder.fsPath, "node_modules", moduleName, "readme.md")})]
+        localUris = [folder.with({path: path.join(folder.fsPath, "node_modules", moduleName, "README.md")})]
     }
 
     // see if we have an override for it
@@ -99,7 +103,7 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
                 
                 // we unpack this in the data provider
                 // but this enables us to have the moduleName is the tab title
-                path: path.join(uri.authority, uri.path, moduleName)
+                path: path.join(uri.authority, uri.path, fixModuleNameForTabTitle(moduleName))
             })
         } else {
             uri = uri.with({
@@ -107,7 +111,7 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
 
                 // we unpack this in the data provider
                 // but this enables us to have the moduleName is the tab title
-                path: '/' + uri.scheme + "://" + path.join(uri.authority, uri.path, moduleName)
+                path: '/' + uri.scheme + "://" + path.join(uri.authority, uri.path, fixModuleNameForTabTitle(moduleName))
             })
         }
 
@@ -125,7 +129,7 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
 
                 // we unpack this in the data provider
                 // but this enables us to have the moduleName is the tab title
-                path: path.join(uri.path, moduleName)
+                path: path.join(uri.path, fixModuleNameForTabTitle(moduleName))
             }))
         }
     }

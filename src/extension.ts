@@ -21,17 +21,15 @@ export function activate(context) {
         vscode.workspace.registerTextDocumentContentProvider(RemoteDataProvider.SchemaType, new RemoteDataProvider()),
         vscode.commands.registerCommand('nodeReadme.showReadme', () => {
 
-            if (vscode.window.activeTextEditor == null) {
+            let moduleName = vscode.window.activeTextEditor ? scanDocument(vscode.window.activeTextEditor) : null;
+
+            if (moduleName == null) {
                 vscode.window.showInputBox({
                     prompt: "Enter Module name"
                 })
                 .then(findReadme)
             } else {
-                const moduleName = scanDocument(vscode.window.activeTextEditor)
-
-                if (moduleName) {
-                    findReadme(moduleName, vscode.window.activeTextEditor)
-                }
+                findReadme(moduleName, vscode.window.activeTextEditor)
             }
         })
     ]

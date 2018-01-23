@@ -26,7 +26,7 @@ export default [
     (line, pos) => {
         let moduleName;
 
-        let re = /import .*?from\s|("|')(.*?)("|')/g;
+        let re = /import .*?from\s("|')(.*?)("|')/g;
         let str = line.text;
         let matched;
         while ((matched = re.exec(str)) != null) {

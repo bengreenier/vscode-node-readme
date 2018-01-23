@@ -4,10 +4,11 @@ import * as url from 'url'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as coreNames from 'node-core-module-names'
+import * as semver from 'semver'
 
 export class NpmDataProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "node-readme-npm-data"
-    
+
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
 
         let packageJson
@@ -16,15 +17,15 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
             // determine if we're vscode >= 1.18.0 (multiroot)
             if (vscode.workspace.getWorkspaceFolder) {
                 const folder = vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)
-                packageJson = folder.uri.with({path: path.join(folder.uri.fsPath, "package.json")}).fsPath
+                packageJson = folder.uri.with({ path: path.join(folder.uri.fsPath, "package.json") }).fsPath
             } else {
                 const folder = vscode.Uri.parse(`file://${vscode.workspace.rootPath}`)
-                packageJson = folder.with({path: path.join(folder.fsPath, "package.json")}).fsPath
+                packageJson = folder.with({ path: path.join(folder.fsPath, "package.json") }).fsPath
             }
         }
 
         let moduleName = uri.path.substr(1)
-        let moduleVersion : string = null
+        let moduleVersion: string = null
 
         if (packageJson) {
             let pkg = JSON.parse(fs.readFileSync(packageJson).toString())
@@ -39,7 +40,7 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
         return this.getReadme(moduleName, moduleVersion)
     }
 
-    private getReadme(moduleName :  string, moduleVersion? : string) : PromiseLike<string> {
+    private getReadme(moduleName: string, moduleVersion?: string): PromiseLike<string> {
         if (coreNames.indexOf(moduleName) >= 0) {
             return this.queryGithub(`https://api.github.com/repos/nodejs/node/contents/doc/api/${moduleName}.md`)
         } else {
@@ -47,26 +48,34 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
         }
     }
 
-    private queryNpm(moduleName : string, moduleVersion: string) : PromiseLike<string> {
-        
+    private queryNpm(moduleName: string, moduleVersion: string): PromiseLike<string> {
+
         // we need to account for moduleNames with /  in them
         moduleName = moduleName.replace(/\//g, '%2f')
-        
+
         return new Promise((resolve, reject) => {
             request({
                 url: `https://registry.npmjs.org/${moduleName}`,
-                json:true
+                json: true
             }, (err, res, body) => {
                 if (err || res.statusCode.toString()[0] !== "2") {
                     return reject(err || `Invalid statusCode ${res.statusCode}`)
                 }
 
                 // #8 TODO it's probably better to read your package.json first and only default to latest
-                if (!body["dist-tags"] || !body["dist-tags"]["latest"]) {
+                if ((!body["dist-tags"] || !body["dist-tags"]["latest"]) &&
+                    !moduleVersion) {
                     return reject(new Error("Invalid registry response"))
                 }
 
-                var latestVer = moduleVersion || body["dist-tags"]["latest"]
+                var latestVer = body["dist-tags"]["latest"]
+
+                if (moduleVersion && semver.valid(moduleVersion) != null) {
+                    const verMatch = semver.maxSatisfying(Object.keys(body["versions"]), moduleVersion)
+                    if (verMatch) {
+                        latestVer = verMatch
+                    }
+                }
 
                 if (!body["versions"] || !body["versions"][latestVer]) {
                     return reject(new Error("Missing registry response data"))
@@ -74,7 +83,6 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
                 if (!body["versions"][latestVer]["repository"] || !body["versions"][latestVer]["repository"]["url"]) {
                     return reject(new Error("Missing registry repository data"))
                 }
-
 
                 // a bad way to determine if the url is from github
                 // TODO dreamup a better way
@@ -104,7 +112,7 @@ export class NpmDataProvider implements vscode.TextDocumentContentProvider {
         })
     }
 
-    private queryGithub(url : string) : PromiseLike<string> {
+    private queryGithub(url: string): PromiseLike<string> {
         return new Promise((resolve, reject) => {
             // make a request to github for the docs
             request({

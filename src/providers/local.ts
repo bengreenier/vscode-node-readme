@@ -1,12 +1,12 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs'
-import * as path from 'path'
+import { ReadmeUri } from '../type-extensions'
 
-export class LocalDataProvider implements vscode.TextDocumentContentProvider {
+export class LocalProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "node-readme-local-data"
     
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
-        
+        return this.getReadme(ReadmeUri.from(uri).rawUri.fsPath)
     }
 
     public getReadme(path : string) : PromiseLike<string> {

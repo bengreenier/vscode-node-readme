@@ -1,22 +1,40 @@
-//
-// Note: This example test is leveraging the Mocha test framework.
-// Please refer to their documentation on https://mochajs.org/ for help.
-//
+import * as assert from 'assert'
+import * as fs from 'fs'
+import * as vscode from 'vscode'
+import * as myExtension from '../extension'
+import * as TypeExtensions from '../type-extensions'
+import * as testContent from 'vscode-test-content'
 
-// The module 'assert' provides assertion methods from node
-import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-import * as myExtension from '../extension';
-
-// Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", () => {
+    
+    test('test', (done) => {
+        testContent.setWithSelection('const express = require(\'e^xpress\')')
+            .then((editor) => {
+                return vscode.commands.executeCommand('nodeReadme.showReadme')
+            })
+            .then(() => {
+                console.log(vscode.window.visibleTextEditors.map(e => e.document.fileName))
+            })
+            .then(done, done)
+    })
 
-    // Defines a Mocha unit test
-    test("Something 1", () => {
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
-    });
-});
+    test("require presents valid local readme", (done) => {
+        vscode.workspace.findFiles('testdata/valid-require.js')
+            .then((files) => {
+                return files[0]
+            })
+            .then(vscode.workspace.openTextDocument)
+            .then((doc) => {
+                vscode.window.activeTextEditor.selection = new vscode.Selection(new vscode.Position(0, 28), new vscode.Position(0, 28)) 
+
+                return vscode.commands.executeCommand('nodeReadme.showReadme')
+            })
+            .then(() => {
+                return vscode.window.visibleTextEditors.filter(e => e.document.fileName === 'request')[0].document.getText()
+            })
+            .then((readmeText) => {
+                assert.equal(readmeText, fs.readFileSync('./testdata/node_modules/request/README.md').toString())
+            })
+            .then(done, done)
+    })
+})

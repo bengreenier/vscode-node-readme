@@ -60,13 +60,15 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "test": "npm run compile && node ./node_modules/copy/bin/cli.js \"src/test/testdata/**\" \"out/test/testdata\" && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.0.43",
+    "copy": "^0.3.1",
     "typescript": "^2.6.1",
     "vscode": "^1.1.6",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "vscode-test-content": "^1.2.0"
   },
   "dependencies": {
     "node-core-module-names": "^1.1.0",

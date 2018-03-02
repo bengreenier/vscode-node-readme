@@ -8,7 +8,6 @@ import { LocalProvider } from '../providers/local'
 import { RemoteProvider } from '../providers/remote'
 import * as testContent from 'vscode-test-content'
 
-
 describe("Extension Tests", () => {
     beforeEach(async () => {
         TestHook.testMode = true

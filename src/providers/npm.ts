@@ -5,6 +5,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as coreNames from 'node-core-module-names'
 import * as semver from 'semver'
+import * as backoff from 'backoff'
 import { ReadmeUri } from '../type-extensions'
 import { TestHook } from '../extension'
 
@@ -59,80 +60,97 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
         // we need to account for moduleNames with /  in them
         moduleName = moduleName.replace(/\//g, '%2f')
 
-        return new Promise((resolve, reject) => {
-            request({
-                url: `https://registry.npmjs.org/${moduleName}`,
-                json: true
-            }, (err, res, body) => {
-                if (err || res.statusCode.toString()[0] !== "2") {
-                    return reject(err || `Invalid statusCode ${res.statusCode}`)
+        return this.getWithBackoff({
+            url: `https://registry.npmjs.org/${moduleName}`,
+            json: true
+        }).then((body) => {
+        
+            // #8 TODO it's probably better to read your package.json first and only default to latest
+            if ((!body["dist-tags"] || !body["dist-tags"]["latest"]) &&
+                !moduleVersion) {
+                throw new Error("Invalid registry response")
+            }
+
+            var latestVer = body["dist-tags"]["latest"]
+
+            if (moduleVersion && semver.valid(moduleVersion) != null) {
+                const verMatch = semver.maxSatisfying(Object.keys(body["versions"]), moduleVersion)
+                if (verMatch) {
+                    latestVer = verMatch
                 }
+            }
 
-                // #8 TODO it's probably better to read your package.json first and only default to latest
-                if ((!body["dist-tags"] || !body["dist-tags"]["latest"]) &&
-                    !moduleVersion) {
-                    return reject(new Error("Invalid registry response"))
-                }
+            if (!body["versions"] || !body["versions"][latestVer]) {
+                throw new Error("Missing registry response data")
+            }
+            if (!body["versions"][latestVer]["repository"] || !body["versions"][latestVer]["repository"]["url"]) {
+                throw new Error("Missing registry repository data")
+            }
 
-                var latestVer = body["dist-tags"]["latest"]
-
-                if (moduleVersion && semver.valid(moduleVersion) != null) {
-                    const verMatch = semver.maxSatisfying(Object.keys(body["versions"]), moduleVersion)
-                    if (verMatch) {
-                        latestVer = verMatch
+            // a bad way to determine if the url is from github
+            // TODO dreamup a better way
+            let url = body["versions"][latestVer]["repository"]["url"]
+            let parts = url.split("/")
+            let githubUri = false
+            let githubParts = []
+            parts.forEach((p) => {
+                if (p === "github.com") {
+                    githubUri = true
+                } else if (githubUri) {
+                    if (p.endsWith(".git")) {
+                        p = p.replace(".git", "")
                     }
+                    githubParts.push(p)
                 }
-
-                if (!body["versions"] || !body["versions"][latestVer]) {
-                    return reject(new Error("Missing registry response data"))
-                }
-                if (!body["versions"][latestVer]["repository"] || !body["versions"][latestVer]["repository"]["url"]) {
-                    return reject(new Error("Missing registry repository data"))
-                }
-
-                // a bad way to determine if the url is from github
-                // TODO dreamup a better way
-                let url = body["versions"][latestVer]["repository"]["url"]
-                let parts = url.split("/")
-                let githubUri = false
-                let githubParts = []
-                parts.forEach((p) => {
-                    if (p === "github.com") {
-                        githubUri = true
-                    } else if (githubUri) {
-                        if (p.endsWith(".git")) {
-                            p = p.replace(".git", "")
-                        }
-                        githubParts.push(p)
-                    }
-                })
-                githubParts.unshift("https://api.github.com/repos")
-                githubParts.push("readme")
-
-                if (!githubUri) {
-                    return reject(new Error("Unsupported registry repository type"))
-                }
-
-                resolve(this.queryGithub(githubParts.join("/")))
             })
+            githubParts.unshift("https://api.github.com/repos")
+            githubParts.push("readme")
+
+            if (!githubUri) {
+                throw new Error("Unsupported registry repository type")
+            }
+
+            return this.queryGithub(githubParts.join("/"))
         })
     }
 
     private queryGithub(url: string): PromiseLike<string> {
-        return new Promise((resolve, reject) => {
-            // make a request to github for the docs
-            request({
-                url: url,
-                headers: {
-                    "User-Agent": "bengreenier/vscode-node-readme",
-                    "Accept": "application/vnd.github.v3.raw"
+        return this.getWithBackoff({
+            url: url,
+            headers: {
+                "User-Agent": "bengreenier/vscode-node-readme",
+                "Accept": "application/vnd.github.v3.raw"
+            }
+        })
+    }
+
+    private getWithBackoff(opts): PromiseLike<string> {
+        const get = (reqOpts, cb) => {
+            request(reqOpts, function (err, res, body) {
+                if (err || res.statusCode !== 200) {
+                    err = err || {}
+                    err.status = res.statusCode
+                    return cb(err)
+                } else {
+                    cb(null, res)
                 }
-            }, (err, res, body) => {
-                if (err || res.statusCode.toString()[0] !== "2") {
-                    return reject(err || `Invalid statusCode ${res.statusCode}`)
-                }
-                resolve(body.toString())
             })
+        }
+        
+        return new Promise((resolve, reject) => {
+            let call = backoff.call(get, opts, (err, res) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(res.body)
+                }
+            })
+            
+            call.retryIf(function(err) { return err.status !== 200 })
+            call.setStrategy(new backoff.ExponentialStrategy())
+            call.failAfter(10)
+
+            call.start()
         })
     }
 }

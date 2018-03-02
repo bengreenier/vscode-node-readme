@@ -40,6 +40,9 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
         return this.getReadme(moduleName, moduleVersion).then((p) => {
             TestHook.log(uri.toString())
             return p
+        }, (err) => {
+            TestHook.err(err)
+            return Promise.reject(err)
         })
     }
 

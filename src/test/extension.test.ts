@@ -36,6 +36,8 @@ describe("Extension Tests", () => {
                         .map(u => TypeExtensions.ReadmeUri.from(u))
                         .map(r => r.moduleName)
                     
+                    console.log(TestHook.logData, TestHook.errData)
+
                     assert.equal(npmModules.length, 1)
                     assert.equal(npmModules[0], 'express')
                 })

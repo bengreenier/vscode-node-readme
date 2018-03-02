@@ -16,6 +16,9 @@ export class RemoteProvider implements vscode.TextDocumentContentProvider {
         }).toString()).then((p) => {
             TestHook.log(uri.toString())
             return p
+        }, (err) => {
+            TestHook.err(err)
+            return Promise.reject(err)
         })
     }
 

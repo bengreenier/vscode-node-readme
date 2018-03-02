@@ -22,10 +22,17 @@ export function deactivate() {
 class TestHookManager {
     testMode : Boolean = false
     logData : Array<string> = []
+    errData : Array<string> = []
 
     log(data : string) {
         if (this.testMode) {
             this.logData.push(data)
+        }
+    }
+
+    err(data : string) {
+        if (this.testMode) {
+            this.errData.push(data)
         }
     }
 

@@ -12,6 +12,9 @@ export class LocalProvider implements vscode.TextDocumentContentProvider {
         return this.getReadme(`${authDriveLetter}${rawUri.fsPath}`).then((p) => {
             TestHook.log(uri.toString())
             return p
+        }, (err) => {
+            TestHook.err(err)
+            return Promise.reject(err)
         })
     }
 

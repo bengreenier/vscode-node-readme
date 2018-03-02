@@ -11,7 +11,41 @@ import * as testContent from 'vscode-test-content'
 describe("Extension Tests", () => {
     beforeEach(async () => {
         TestHook.testMode = true
+        TestHook.setHttpImpl((opts : any, cb) => {
+            if (opts.url.endsWith('not-a-real-module')) {
+                return cb(new Error('no such module'))
+            }
+
+            setTimeout(() => {
+                if (opts.json) {
+                    const moduleName = opts.url.split('/')[3]
+                    return cb(null, {
+                        statusCode: 200,
+                        body: {
+                            "dist-tags": {
+                                "latest": "1"
+                            },
+                            "versions": {
+                                "1": {
+                                    "repository": {
+                                        "type": "git",
+                                        "url": `git+https://github.com/${moduleName}/${moduleName}.git`                                  
+                                    }
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    return cb(null, {
+                        statusCode: 200,
+                        body: `raw text, but here's the serialized params: ${JSON.stringify(opts)}`
+                    })
+                }
+            }, 500)
+        })
+
         TestHook.clear()
+        
         await vscode.workspace.getConfiguration()
             .update(TypeExtensions.overrideConfigurationSection, {})
             .then(() => {}, () => {})
@@ -35,8 +69,6 @@ describe("Extension Tests", () => {
                         .map(u => TypeExtensions.ReadmeUri.from(u))
                         .map(r => r.moduleName)
                     
-                    console.log(TestHook.logData, TestHook.errData)
-
                     assert.equal(npmModules.length, 1)
                     assert.equal(npmModules[0], 'express')
                 })
@@ -78,7 +110,7 @@ describe("Extension Tests", () => {
                 })
                 .then(() => {
                     return new Promise((resolve, reject) => {
-                        setTimeout(() => resolve(), 5000)
+                        setTimeout(() => resolve(), 15000)
                     })
                 })
                 .then(() => {
@@ -86,6 +118,7 @@ describe("Extension Tests", () => {
                         .filter(d => d.startsWith(NpmProvider.SchemaType))
                     
                     assert.equal(npmModules.length, 0)
+                    assert.equal(TestHook.errData.length, 1)
                 })
                 .then(done, done)
         }).timeout(30 * 1000)

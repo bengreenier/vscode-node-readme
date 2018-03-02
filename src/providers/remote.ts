@@ -1,4 +1,3 @@
-import * as request from 'request'
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as backoff from 'backoff'
@@ -24,20 +23,8 @@ export class RemoteProvider implements vscode.TextDocumentContentProvider {
     }
 
     public getReadme(path : string) : PromiseLike<string> {
-        const get = (opts, cb) => {
-            request(opts, function (err, res, body) {
-                if (err || res.statusCode !== 200) {
-                    err = err || {}
-                    err.status = res.statusCode
-                    return cb(err)
-                } else {
-                    cb(null, res)
-                }
-            })
-        }
-        
         return new Promise((resolve, reject) => {
-            let call = backoff.call(get, {
+            let call = backoff.call(TestHook.getHttpImpl(), {
                 url: path,
                 headers: {
                     "User-Agent": "bengreenier/vscode-node-readme"
@@ -52,7 +39,7 @@ export class RemoteProvider implements vscode.TextDocumentContentProvider {
              
             call.retryIf(function(err) { return err.status !== 200 })
             call.setStrategy(new backoff.ExponentialStrategy())
-            call.failAfter(10)
+            call.failAfter(5)
 
             call.start()
         })

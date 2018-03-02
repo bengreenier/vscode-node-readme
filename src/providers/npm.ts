@@ -1,4 +1,3 @@
-import * as request from 'request'
 import * as vscode from 'vscode'
 import * as url from 'url'
 import * as path from 'path'
@@ -125,20 +124,8 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
     }
 
     private getWithBackoff(opts): PromiseLike<string> {
-        const get = (reqOpts, cb) => {
-            request(reqOpts, function (err, res, body) {
-                if (err || res.statusCode !== 200) {
-                    err = err || {}
-                    err.status = res.statusCode
-                    return cb(err)
-                } else {
-                    cb(null, res)
-                }
-            })
-        }
-        
         return new Promise((resolve, reject) => {
-            let call = backoff.call(get, opts, (err, res) => {
+            let call = backoff.call(TestHook.getHttpImpl(), opts, (err, res) => {
                 if (err) {
                     reject(err)
                 } else {
@@ -148,7 +135,7 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
             
             call.retryIf(function(err) { return err.status !== 200 })
             call.setStrategy(new backoff.ExponentialStrategy())
-            call.failAfter(10)
+            call.failAfter(5)
 
             call.start()
         })

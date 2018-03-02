@@ -70,3 +70,5 @@ export class ReadmeUri {
         return this._moduleName
     }
 }
+
+export const overrideConfigurationSection = "nodeReadme.overrides"

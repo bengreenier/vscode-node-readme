@@ -1,12 +1,18 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs'
 import { ReadmeUri } from '../type-extensions'
+import { TestHook } from '../extension'
 
 export class LocalProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "node-readme-local-data"
     
     public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken) {
-        return this.getReadme(ReadmeUri.from(uri).rawUri.fsPath)
+        const rawUri = ReadmeUri.from(uri).rawUri
+        const authDriveLetter = rawUri.authority ? rawUri.authority + '\\' : ''
+        return this.getReadme(`${authDriveLetter}${rawUri.fsPath}`).then((p) => {
+            TestHook.log(uri.toString())
+            return p
+        })
     }
 
     public getReadme(path : string) : PromiseLike<string> {

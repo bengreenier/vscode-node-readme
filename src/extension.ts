@@ -18,3 +18,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
 }
+
+class TestHookManager {
+    testMode : Boolean = false
+    logData : Array<string> = []
+
+    log(data : string) {
+        if (this.testMode) {
+            this.logData.push(data)
+        }
+    }
+
+    clear() {
+        this.logData = []
+    }
+}
+
+export const TestHook = new TestHookManager()

@@ -3,8 +3,8 @@ import * as vscode from 'vscode'
 import {importParser} from '../parsers/import'
 import {requireParser} from '../parsers/require'
 
-suite('Parsers', () => {
-    test('should parse import calls', () => {
+describe('Parsers', () => {
+    it('should parse import calls', () => {
         assert.equal(importParser('import lib from "lib";', 18), 'lib')
         assert.equal(importParser('import pie from "lib";', 18), 'lib')
         assert.equal(importParser('import lib from "lib"', 18), 'lib')
@@ -16,7 +16,7 @@ suite('Parsers', () => {
         assert.equal(importParser('           ', 5), undefined)
     })
 
-    test('should parse require calls', () => {
+    it('should parse require calls', () => {
         assert.equal(requireParser('const abc = require("abc");', 22), 'abc')
         assert.equal(requireParser('const abc = require("abc")', 22), 'abc')
         assert.equal(requireParser('const abc = require(\'abc\');', 22), 'abc')

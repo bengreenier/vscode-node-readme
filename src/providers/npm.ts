@@ -6,6 +6,7 @@ import * as fs from 'fs'
 import * as coreNames from 'node-core-module-names'
 import * as semver from 'semver'
 import { ReadmeUri } from '../type-extensions'
+import { TestHook } from '../extension'
 
 export class NpmProvider implements vscode.TextDocumentContentProvider {
     public static SchemaType = "node-readme-npm-data"
@@ -14,21 +15,19 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
 
         let packageJson
 
-        if (vscode.window.activeTextEditor) {
-            // determine if we're vscode >= 1.18.0 (multiroot)
-            if (vscode.workspace.getWorkspaceFolder) {
-                const folder = vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)
+        if (vscode.window.activeTextEditor &&
+            vscode.window.activeTextEditor.document) {
+            const folder = vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)
+
+            if (folder) {
                 packageJson = folder.uri.with({ path: path.join(folder.uri.fsPath, "package.json") }).fsPath
-            } else {
-                const folder = vscode.Uri.parse(`file://${vscode.workspace.rootPath}`)
-                packageJson = folder.with({ path: path.join(folder.fsPath, "package.json") }).fsPath
             }
         }
 
-        let moduleName = ReadmeUri.from(uri).moduleName
+        let moduleName = (() => { const p = ReadmeUri.from(uri).rawUri.path.split('/'); return p[p.length - 1]; })()
         let moduleVersion: string = null
 
-        if (packageJson) {
+        if (packageJson && fs.existsSync(packageJson)) {
             let pkg = JSON.parse(fs.readFileSync(packageJson).toString())
 
             if (pkg["dependencies"] && pkg["dependencies"][moduleName]) {
@@ -38,7 +37,10 @@ export class NpmProvider implements vscode.TextDocumentContentProvider {
             }
         }
 
-        return this.getReadme(moduleName, moduleVersion)
+        return this.getReadme(moduleName, moduleVersion).then((p) => {
+            TestHook.log(uri.toString())
+            return p
+        })
     }
 
     private getReadme(moduleName: string, moduleVersion?: string): PromiseLike<string> {

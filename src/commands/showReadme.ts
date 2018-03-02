@@ -4,13 +4,14 @@ import * as fs from 'fs'
 import { importParser } from '../parsers/import'
 import { requireParser } from '../parsers/require'
 import { vscodeHelper } from '../parsers/vscode-helper'
-import { LocalProvider } from '../providers/local';
-import { NpmProvider } from '../providers/npm';
-import { ReadmeUri } from '../type-extensions';
+import { LocalProvider } from '../providers/local'
+import { NpmProvider } from '../providers/npm'
+import { RemoteProvider } from '../providers/remote'
+import { ReadmeUri, overrideConfigurationSection } from '../type-extensions'
 
 export const id = "showReadme"
 export function command() {
-    let moduleName = vscode.window.activeTextEditor ? scanDocument(vscode.window.activeTextEditor) : null;
+    let moduleName = vscode.window.activeTextEditor ? scanDocument(vscode.window.activeTextEditor) : null
 
     if (moduleName == null) {
         vscode.window.showInputBox({
@@ -46,29 +47,40 @@ function findReadme(moduleName : string, textEditor ?: vscode.TextEditor) {
     }
 
     const workspaceFolder = vscode.workspace.getWorkspaceFolder(textEditor.document.uri)
+    let readmeLocation = vscode.Uri.parse(`https://npmjs.org/package/${moduleName}`)
 
-    // TODO(bengreenier): support multiple readme file names (on *nix this may be ReAdMe.Md for example)
-    let readmeLocation = workspaceFolder.uri.with({path: path.join(workspaceFolder.uri.fsPath, "node_modules", moduleName, "README.md")})
+    if (workspaceFolder) {
+        const fsLocation = workspaceFolder.uri.with({path: path.join(workspaceFolder.uri.fsPath, "node_modules", moduleName, "README.md")})
+
+        if (fs.existsSync(fsLocation.fsPath)) {
+            readmeLocation = fsLocation.with({
+                scheme: 'file'
+            })
+        }
+    }
 
     // see if we have an override for it
-    const overrides = vscode.workspace.getConfiguration("nodeReadme.overrides")
+    const overrides = vscode.workspace.getConfiguration(overrideConfigurationSection)
 
     if (overrides[moduleName]) {
         // if we do, use that
         readmeLocation = vscode.Uri.parse(overrides[moduleName])
+    }
+
+    // map schemes to our scheme types
+    if (readmeLocation.scheme === 'file') {
+        readmeLocation = readmeLocation.with({
+            scheme: LocalProvider.SchemaType
+        })
+    } else if (readmeLocation.authority === 'npmjs.org') {
+        readmeLocation = readmeLocation.with({
+            scheme: NpmProvider.SchemaType
+        })
     } else {
-        // otherwise, check if it's local
-        if (fs.existsSync(readmeLocation.fsPath)) {
-            // if it is, use local scheme
-            readmeLocation = readmeLocation.with({
-                scheme: LocalProvider.SchemaType
-            })
-        } else {
-            // if it isn't, use remote scheme
-            readmeLocation = readmeLocation.with({
-                scheme: NpmProvider.SchemaType
-            })
-        }
+        readmeLocation = readmeLocation.with({
+            scheme: RemoteProvider.SchemaType,
+            fragment: `${readmeLocation.scheme}.${readmeLocation.fragment}`
+        })
     }
 
     return vscode.commands.executeCommand('markdown.showPreviewToSide', ReadmeUri.from(readmeLocation, moduleName).toEncodedUri())

@@ -5,7 +5,7 @@
 [![Open Issues](https://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 [![Build Status](https://travis-ci.org/bengreenier/vscode-node-readme.svg?branch=master)](https://travis-ci.org/bengreenier/vscode-node-readme)
 
-A [vscode](https://code.visualstudio.com) extension to view javascript module documentation __in editor__. :memo: :computer:
+A [vscode](https://code.visualstudio.com) extension to view javascript module documentation __in editor__. 📝 💻
 
 ![import example](images/example-import.gif)
 
@@ -57,12 +57,17 @@ This will load the specified file or module documentation rather than the offici
 
 Here's a running list of recent changes! :sparkles:
 
++ 3.0.1
+    - Updated description
+    - Fixed Readme Emojis
+    
 + 3.0.0
     - Better documentation
     - Automated tests
         - Refactor to support easier testing
     - Dropped support for older vscode versions
         - Requires `^1.18.0` now
+
 + 2.3.0
     - Semver npm lookup bugfix (shoutout to [@CallMeLaNN](https://github.com/CallMeLaNN))
         - Fix npm lookup with semver ranges (see [#31](https://github.com/bengreenier/vscode-node-readme/issues/31))

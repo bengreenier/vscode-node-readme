@@ -1,8 +1,8 @@
 {
   "name": "vscode-node-readme",
   "displayName": "node-readme",
-  "description": "view installed node_modules readmes",
-  "version": "3.0.0",
+  "description": "A vscode extension to view javascript module documentation in editor.",
+  "version": "3.0.1",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {
@@ -26,7 +26,7 @@
               "null"
             ],
             "default": null,
-            "description": "Specifies documentation overrides on a per module basis"
+            "description": "Specifies custom documentation overrides on a per module basis"
           }
         }
       }
@@ -98,8 +98,7 @@
   "keywords": [
     "node",
     "readme",
-    "\"multi-root",
-    "ready\""
+    "multi-root ready"
   ],
   "author": "Ben Greenier",
   "license": "MIT",

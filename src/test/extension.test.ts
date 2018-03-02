@@ -21,7 +21,7 @@ describe("Extension Tests", () => {
     describe("NPM", () => {
         it('express (no workspace, non-override)', (done) => {
             testContent.setWithSelection('const express = require(\'e^xpress\')')
-                .then((editor) => {
+                .then((editor : vscode.TextEditor) => {
                     return vscode.commands.executeCommand('nodeReadme.showReadme')
                 })
                 .then(() => {

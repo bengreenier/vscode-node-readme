@@ -34,7 +34,22 @@
     "menus": {
       "editor/context": [
         {
-          "when": "editorLangId == javascript || editorLangId == typescript || editorLangId == javascriptreact || editorLangId == typescriptreact",
+          "when": "editorLangId == javascript",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
+        },
+        {
+          "when": "editorLangId == typescript",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
+        },
+        {
+          "when": "editorLangId == javascriptreact",
+          "command": "nodeReadme.showReadme",
+          "group": "navigation@9999"
+        },
+        {
+          "when": "editorLangId == typescriptreact",
           "command": "nodeReadme.showReadme",
           "group": "navigation@9999"
         }

@@ -7,6 +7,7 @@ import { vscodeHelper } from '../parsers/vscode-helper'
 import { LocalProvider } from '../providers/local'
 import { NpmProvider } from '../providers/npm'
 import { RemoteProvider } from '../providers/remote'
+import { TestHook } from '../extension'
 import { ReadmeUri, overrideConfigurationSection } from '../type-extensions'
 
 export const id = "showReadme"
@@ -18,7 +19,16 @@ export function command() {
             prompt: "Enter Module name"
         })
         .then(findReadme)
-    } else {
+    } else if (vscode.window.activeTextEditor &&
+        vscode.window.activeTextEditor.document &&
+        (
+            // testMode bypasses these checks... *sigh*
+            TestHook.testMode ||
+            vscode.window.activeTextEditor.document.languageId === 'javascript' ||
+            vscode.window.activeTextEditor.document.languageId === 'typescript' ||
+            vscode.window.activeTextEditor.document.languageId === 'javascriptreact' || 
+            vscode.window.activeTextEditor.document.languageId === 'typescriptreact'
+        )) {
         findReadme(moduleName)
     }
 }

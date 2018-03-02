@@ -3,12 +3,35 @@
 [![Current Version](https://vsmarketplacebadge.apphb.com/version/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 [![Install Count](https://vsmarketplacebadge.apphb.com/installs/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 [![Open Issues](https://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
+[![Build Status](https://travis-ci.org/bengreenier/vscode-node-readme.svg?branch=master)](https://travis-ci.org/bengreenier/vscode-node-readme)
 
-View installed node_modules readmes
+A [vscode](https://code.visualstudio.com) extension to view javascript module documentation __in editor__. :memo: :computer:
 
-![Example](images/example.gif)
+![import example](images/example-import.gif)
 
-## Keybinding
+## Features
+
++ In-editor viewing of documentation
++ Offline documentation for installed modules
++ Online documentation for any module
++ Custom documentation overrides
++ Supports [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) syntax
++ Supports [require](https://nodejs.org/api/modules.html#modules_require) syntax
+
+## Supported Languages
+
+This extension supports navigating to documentation from the following programming languages:
+
+* Javascript (js)
+* React (jsx)
+* Typescript (ts)
+* Typescript React (tsx)
+
+![supported languages illustration](images/supported-syntax.png)
+
+## Keybindings
+
+By default, `ctrl+shift+r` (or `cmd+shift+r` on mac) is bound as a shortcut to show the documentation for a module, if the cursor is currently touching that module name.
 
 If you wish to change the key binding for this behavior, do the following:
 
@@ -16,27 +39,30 @@ If you wish to change the key binding for this behavior, do the following:
 + Search for "nodeReadme"
 + Click on the pencil icon to edit
 
-## Custom overrides
+![keybinding illustration](images/keybindings.png)
 
-If you wish to load a document that isn't the `README.md` file for a particular module, do the following:
+## Custom documentation
+
+If you wish to override the documentation that will be provided for a specific module, you can do so using extension settings.
 
 + File -> Preferences -> Settings
 + Search for "nodeReadme"
-+ Override `nodeReadme.overrides` with an object containing your overrides indexed by module name
++ Override `nodeReadme.overrides` with an object containing your custom documentation overrides indexed by module name
 
-For example: 
+![custom documentation illustration](images/customdocs.png)
 
-```
-"nodeReadme.overrides": {
-        "angular-infinity": "file://c:/path/to/document",
-        "angular2": "https://raw.githubusercontent.com/angular/angular/master/aio/content/guide/ajs-quick-reference.md"
-    }
-```
+This will load the specified file or module documentation rather than the official `README.md` from the original module.
 
-This will load that file rather than the official `README.md` as determined from the `npm package`.
+## Release Notes
 
-## Changes
+Here's a running list of recent changes! :sparkles:
 
++ 3.0.0
+    - Better documentation
+    - Automated tests
+        - Refactor to support easier testing
+    - Dropped support for older vscode versions
+        - Requires `^1.18.0` now
 + 2.3.0
     - Semver npm lookup bugfix (shoutout to [@CallMeLaNN](https://github.com/CallMeLaNN))
         - Fix npm lookup with semver ranges (see [#31](https://github.com/bengreenier/vscode-node-readme/issues/31))
@@ -93,26 +119,12 @@ This will load that file rather than the official `README.md` as determined from
     - Support for documentation from npmjs.org
     - Better command name
 
-## Features
+-----------------------------------------------------------------------------------------------------------
 
-Quickly open `node_modules` readme files.
+### For more information
 
-### Inline
+* [Github Issues](https://github.com/bengreenier/vscode-node-readme/issues)
+* [Github Page](https://github.com/bengreenier/vscode-node-readme)
+* [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 
-+ Right click a `require('moduleName')` call in a `js` or `ts` file
-+ Select `View Node Module Readme`
-
-### Via Menu
-
-+ Open Menu (`Ctrl+Shift+P` by default on windows)
-+ Type `View Node Module Readme`
-+ If you have a module highlighted we'll go to that
-+ If you do not, we'll prompt for a module name
-
-## Issues?
-
-File them [here](https://github.com/bengreenier/vscode-node-readme/issues). Feel free to contribute code, if you're a developer.
-
-## License
-
-MIT
+**Enjoy!**

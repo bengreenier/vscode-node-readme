@@ -7,11 +7,7 @@
             "es6"
         ],
         "sourceMap": true,
-        "rootDir": ".",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["./typings/*"]
-        }
+        "rootDir": "src"
     },
     "exclude": [
         "node_modules",

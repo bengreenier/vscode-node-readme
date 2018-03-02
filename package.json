@@ -2,15 +2,11 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "view installed node_modules readmes",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {
-    "vscode": "^1.12.0"
-  },
-  "galleryBanner": {
-    "color": "#ffc985",
-    "theme": "light"
+    "vscode": "^1.18.0"
   },
   "categories": [
     "Other"
@@ -18,7 +14,7 @@
   "activationEvents": [
     "onCommand:nodeReadme.showReadme"
   ],
-  "main": "./out/src/extension",
+  "main": "./out/extension",
   "contributes": {
     "configuration": [
       {
@@ -75,38 +71,23 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run compile && node ./node_modules/copy/bin/cli.js \"src/test/testdata/**\" \"out/test/testdata\" && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.44",
-    "@types/node": "^6.0.91",
-    "@types/semver": "^5.4.0",
-    "mocha": "^2.3.3",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.0.43",
+    "copy": "^0.3.1",
     "typescript": "^2.6.1",
-    "vscode": "^1.1.7"
+    "vscode": "^1.1.6",
+    "vscode-test-content": "^1.2.0"
   },
   "dependencies": {
     "node-core-module-names": "^1.1.0",
     "request": "^2.83.0",
-    "semver": "^5.5.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bengreenier/vscode-node-readme.git"
-  },
-  "keywords": [
-    "vscode",
-    "node",
-    "readme",
-    "multi-root ready"
-  ],
-  "author": "Ben Greenier",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bengreenier/vscode-node-readme/issues"
-  },
-  "homepage": "https://github.com/bengreenier/vscode-node-readme#readme"
+    "request-promise": "^4.2.2"
+  }
 }

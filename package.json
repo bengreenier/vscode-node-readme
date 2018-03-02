@@ -90,5 +90,21 @@
     "node-core-module-names": "^1.1.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bengreenier/vscode-node-readme.git"
+  },
+  "keywords": [
+    "node",
+    "readme",
+    "\"multi-root",
+    "ready\""
+  ],
+  "author": "Ben Greenier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bengreenier/vscode-node-readme/issues"
+  },
+  "homepage": "https://github.com/bengreenier/vscode-node-readme#readme"
 }

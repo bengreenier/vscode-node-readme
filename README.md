@@ -57,6 +57,9 @@ This will load the specified file or module documentation rather than the offici
 
 Here's a running list of recent changes! :sparkles:
 
++ 3.0.2
+    - Fixed semver issue
+
 + 3.0.1
     - Updated description
     - Fixed Readme Emojis

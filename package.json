@@ -2,7 +2,7 @@
   "name": "vscode-node-readme",
   "displayName": "node-readme",
   "description": "A vscode extension to view javascript module documentation in editor.",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "publisher": "bengreenier",
   "icon": "images/icon.png",
   "engines": {
@@ -89,7 +89,8 @@
     "backoff": "^2.5.0",
     "node-core-module-names": "^1.1.0",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "semver": "^5.5.0"
   },
   "repository": {
     "type": "git",

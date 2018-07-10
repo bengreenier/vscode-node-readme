@@ -1,19 +1,20 @@
 sudo: false
-
 os:
-  - osx
-  - linux
-
+- osx
+- linux
 before_install:
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-      sh -e /etc/init.d/xvfb start;
-      sleep 3;
-    fi
-
+- if [ $TRAVIS_OS_NAME == "linux" ]; then export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+  sh -e /etc/init.d/xvfb start; sleep 3; fi
 install:
-  - npm install
-  - npm run vscode:prepublish
-
+# package-lock.json was introduced in npm@5
+- '[[ $(node -v) =~ ^v9.*$ ]] || npm install -g npm@latest' # skipped when using node 9
+- npm install -g greenkeeper-lockfile
+- npm install
+- npm run vscode:prepublish
 script:
-  - npm test --silent
+- npm test --silent
+env:
+  global:
+    secure: tCkAmOjOXeXXPoaFlHbhHdyjlczcKUk357UDbc17bmp6yWwiUghLG+rLxuDPgbbzHSx4xSOGXbw/ucEepE/OtfI6pSX+1x0s+k6lgznkD6iP9cBaXhdgHw4AvxOR+4OhHEIC3HjNb3Eo3Cy+0JwbvHfnT30Rgltp7EAN2fj+0fH2O7ghDcbGU7wNpZMEA+qbj4Z5uzwU3DR5vvPO/m/BgrXUrMpYXHO1UeG0WhNkx0soT6xtvSLG6IYN1gUkMRtxI/b1NA4dlJhLzarhDfJw/3TDAhLdWjUdoW0oXgIkn3F8X+4kQ8mXymVXlJScm9Ya+hFCRT48pb0VjgUCzgNvTF38LLADF19JtWTULslNG4lL4nvgyDUp+PVz014lpvnRafognH5txC2iHDG3zBk5k8Xynlf/MNBqnfeDzQr6BgFNHKkhEZJ+5xt0pYZhhatU3+gsW59ZF/DZH7YnjLYmuxN1/Y7ON4sMG9iXQnnfoimLuy29BkUff7+ic3K+mFUzqvzah4xeXCbzul7rrhqk22CVf1CNn1vlDX+6PV8Aag6CrnWBaKOrMhXhOfDxjhnqSrTUi8tj+me80JrdH0xddf2cDeqDHxcF1x7mg+U7X8+gAJxhnhfQFAj2BHUKTzXAMVfDAWJGvHAh7RdPhLvKJzmd/mBg/w8IqU4fNX2Wa2g=
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload

@@ -3,7 +3,7 @@
 [![Current Version](https://vsmarketplacebadge.apphb.com/version/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 [![Install Count](https://vsmarketplacebadge.apphb.com/installs/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
 [![Open Issues](https://vsmarketplacebadge.apphb.com/rating/bengreenier.vscode-node-readme.svg)](https://marketplace.visualstudio.com/items?itemName=bengreenier.vscode-node-readme)
-[![Build Status](https://travis-ci.org/bengreenier/vscode-node-readme.svg?branch=master)](https://travis-ci.org/bengreenier/vscode-node-readme)
+[![Build Status](https://travis-ci.org/bengreenier/vscode-node-readme.svg?branch=master)](https://travis-ci.org/bengreenier/vscode-node-readme) [![Greenkeeper badge](https://badges.greenkeeper.io/bengreenier/vscode-node-readme.svg)](https://greenkeeper.io/)
 
 A [vscode](https://code.visualstudio.com) extension to view javascript module documentation __in editor__. 📝 💻
 
